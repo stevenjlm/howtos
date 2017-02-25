@@ -1,0 +1,14 @@
+# For compiling Cilk Plus code with CUDA code
+
+project: project.cpp cilk.o gpuFuncs.o
+	g++ -g -L/usr/local/cuda/lib64 -I/usr/local/cuda/include/ -o project -fcilkplus project.cpp cilk.o gpuFuncs.o -lcuda -lcudart -lcurand
+
+submit.o: cilk.cpp
+	g++ -g -c -fcilkplus cilk.cpp
+
+gpuFuncs.o: gpuFuncs.cu
+	nvcc -g -c -arch=sm_20 gpuFuncs.cu
+
+clean: 
+	-rm innerproduct *~
+	-rm *.o
